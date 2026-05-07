@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>See It, Hear It, Say It! 🌈</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --pink:#FF6FB7;--yellow:#FFD93D;--green:#6BCB77;--blue:#4D96FF;
+      --orange:#FF922B;--purple:#C77DFF;--red:#FF4D6D;--teal:#38D9A9;
+      --white:#FFFFFF;--dark:#2D2D2D;--bg:#FFF9F0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Nunito',sans-serif;background:var(--bg);overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;z-index:-1;
+      background-image:
+        radial-gradient(circle at 8% 12%,#FFD93D30 90px,transparent 90px),
+        radial-gradient(circle at 92% 8%, #FF6FB730 70px,transparent 70px),
+        radial-gradient(circle at 50% 92%,#4D96FF30 100px,transparent 100px),
+        radial-gradient(circle at 82% 68%,#6BCB7730 80px,transparent 80px),
+        radial-gradient(circle at 18% 78%,#C77DFF30 60px,transparent 60px);
+      background-color:var(--bg);}
+
+    /* ═══ WELCOME ═══ */
+    #welcome{position:fixed;inset:0;z-index:9999;
+      background:linear-gradient(135deg,var(--blue),var(--purple),var(--pink));
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:24px;text-align:center;transition:opacity .6s;}
+    #welcome.hide{opacity:0;pointer-events:none;}
+    #welcome h1{font-family:'Fredoka One',cursive;font-size:clamp(2.4rem,7vw,5rem);color:#fff;text-shadow:4px 4px 0 #0003;margin:14px 0 10px;}
+    #welcome .ws{color:#fff;font-size:clamp(1rem,2.5vw,1.3rem);max-width:600px;opacity:.93;line-height:1.7;}
+    #welcome .badges{margin:14px 0;}
+    .wbadge{background:#fff3;border:2px solid #fff5;border-radius:50px;padding:8px 20px;margin:4px;color:#fff;font-weight:700;font-size:.9rem;display:inline-block;}
+    .we{font-size:5rem;animation:bounce 1.5s ease-in-out infinite;display:block;}
+    .start-btn{font-family:'Fredoka One',cursive;font-size:1.7rem;padding:18px 56px;border:none;border-radius:50px;
+      background:var(--yellow);color:var(--dark);cursor:pointer;box-shadow:0 8px 0 #c8960055,0 12px 24px #0003;
+      margin-top:22px;transition:transform .15s;}
+    .start-btn:hover{transform:translateY(-4px);}
+
+    /* ═══ HEADER ═══ */
+    header{background:linear-gradient(135deg,var(--blue),var(--purple),var(--pink));
+      padding:36px 20px 58px;text-align:center;position:relative;overflow:hidden;
+      clip-path:ellipse(110% 100% at 50% 0%);}
+    header::after{content:'🌟⭐✨🌟⭐✨🌟⭐✨🌟⭐✨🌟⭐✨🌟';
+      position:absolute;bottom:-8px;left:0;right:0;font-size:1.8rem;letter-spacing:6px;
+      animation:slide 10s linear infinite;white-space:nowrap;}
+    @keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+    .hero-e{font-size:4.5rem;display:block;animation:bounce 1.5s ease-in-out infinite;}
+    header h1{font-family:'Fredoka One',cursive;font-size:clamp(2.2rem,6vw,4.5rem);color:#fff;text-shadow:4px 4px 0 #0003;margin:12px 0 6px;line-height:1.1;}
+    header p{font-size:clamp(.95rem,2.5vw,1.3rem);color:#fff;font-weight:700;opacity:.92;}
+
+    /* ═══ SCORE BAR ═══ */
+    .score-bar{display:flex;justify-content:center;gap:14px;padding:14px 20px;background:#fff;
+      box-shadow:0 2px 12px #0001;flex-wrap:wrap;}
+    .spill{font-family:'Fredoka One',cursive;font-size:1.05rem;padding:8px 20px;border-radius:50px;color:#fff;box-shadow:0 4px 0 #0002;}
+    .s1{background:linear-gradient(135deg,var(--yellow),var(--orange));}
+    .s2{background:linear-gradient(135deg,var(--red),var(--pink));}
+    .s3{background:linear-gradient(135deg,var(--green),var(--teal));}
+
+    /* ═══ NAV ═══ */
+    nav{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;padding:26px 16px 14px;}
+    .tab{font-family:'Fredoka One',cursive;font-size:1.05rem;padding:10px 22px;border:none;
+      border-radius:50px;cursor:pointer;color:#fff;text-shadow:1px 1px 0 #0003;
+      box-shadow:0 6px 0 #0002,0 8px 16px #0002;transition:transform .15s,box-shadow .15s;}
+    .tab:hover{transform:translateY(-3px);}
+    .tab:active,.tab.active{transform:translateY(3px);box-shadow:0 2px 0 #0002;outline:4px solid var(--yellow);}
+    .tab[data-tab="colors"]    {background:linear-gradient(135deg,var(--pink),var(--orange));}
+    .tab[data-tab="animals"]   {background:linear-gradient(135deg,var(--green),var(--teal));}
+    .tab[data-tab="numbers"]   {background:linear-gradient(135deg,var(--blue),var(--purple));}
+    .tab[data-tab="objects"]   {background:linear-gradient(135deg,var(--yellow),var(--orange));color:var(--dark);text-shadow:none;}
+    .tab[data-tab="body"]      {background:linear-gradient(135deg,var(--red),var(--pink));}
+    .tab[data-tab="food"]      {background:linear-gradient(135deg,var(--orange),var(--yellow));color:var(--dark);text-shadow:none;}
+    .tab[data-tab="flashcards"]{background:linear-gradient(135deg,var(--teal),var(--blue));}
+    .tab[data-tab="speaking"]  {background:linear-gradient(135deg,var(--purple),var(--red));}
+    .tab[data-tab="activities"]{background:linear-gradient(135deg,#555,#222);}
+
+    /* ═══ SECTIONS ═══ */
+    section{display:none;max-width:1200px;margin:0 auto;padding:16px 16px 60px;}
+    section.active{display:block;animation:fadeIn .4s ease;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .sec-title{font-family:'Fredoka One',cursive;font-size:clamp(1.8rem,4vw,3rem);text-align:center;margin-bottom:6px;color:var(--dark);}
+    .sec-title::after{content:'';display:block;width:70px;height:6px;border-radius:3px;margin:8px auto 0;}
+    #colors    .sec-title::after{background:var(--pink);}
+    #animals   .sec-title::after{background:var(--green);}
+    #numbers   .sec-title::after{background:var(--blue);}
+    #objects   .sec-title::after{background:var(--orange);}
+    #body      .sec-title::after{background:var(--red);}
+    #food      .sec-title::after{background:var(--yellow);}
+    #flashcards .sec-title::after{background:var(--teal);}
+    #speaking  .sec-title::after{background:var(--purple);}
+    #activities .sec-title::after{background:var(--dark);}
+    .sec-tip{text-align:center;color:#888;font-size:1rem;font-weight:700;margin-bottom:22px;}
+
+    /* ═══ VOCAB CARDS ═══ */
+    .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:15px;}
+    .card{background:#fff;border-radius:22px;padding:18px 12px;text-align:center;
+      box-shadow:0 6px 0 #0001,0 10px 20px #0001;cursor:pointer;
+      transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden;}
+    .card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,#fff5,transparent 70%);pointer-events:none;}
+    .card:hover{transform:translateY(-7px) rotate(-1.5deg);box-shadow:0 14px 0 #0001,0 18px 28px #0002;}
+    .card:active{transform:scale(.95);}
+    .card-e{font-size:2.8rem;display:block;margin-bottom:7px;}
+    .card-w{font-family:'Fredoka One',cursive;font-size:1.25rem;color:var(--dark);}
+    .card-s{font-size:.78rem;font-weight:700;color:#999;margin-top:2px;}
+    .swatch{width:68px;height:68px;border-radius:50%;margin:0 auto 9px;box-shadow:0 4px 12px #0002;border:5px solid #fff;}
+    .card.learned{outline:3px solid var(--green);}
+    .card.learned::after{content:'✓';position:absolute;top:6px;right:9px;color:var(--green);font-weight:900;font-size:.95rem;}
+    .cat-lbl{font-family:'Fredoka One',cursive;font-size:1rem;color:#fff;padding:7px 18px;
+      border-radius:50px;display:inline-block;margin:18px 0 10px;}
+
+    /* ═══ FLASHCARDS ═══ */
+    .fc-controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:24px;}
+    .fc-cat-btn{font-family:'Fredoka One',cursive;font-size:1rem;padding:9px 20px;border:none;
+      border-radius:50px;cursor:pointer;color:#fff;box-shadow:0 4px 0 #0002;transition:transform .15s;}
+    .fc-cat-btn:hover{transform:translateY(-2px);}
+    .fc-cat-btn.active{outline:4px solid var(--dark);transform:translateY(2px);}
+
+    .fc-arena{display:flex;flex-direction:column;align-items:center;gap:20px;}
+    .fc-progress{font-family:'Fredoka One',cursive;font-size:1.1rem;color:#888;}
+
+    .flashcard{width:320px;height:220px;perspective:1000px;cursor:pointer;margin:0 auto;}
+    .fc-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .55s;}
+    .flashcard.flipped .fc-inner{transform:rotateY(180deg);}
+    .fc-front,.fc-back{position:absolute;inset:0;border-radius:28px;backface-visibility:hidden;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;}
+    .fc-front{background:linear-gradient(135deg,#EEF6FF,#E0EEFF);box-shadow:0 8px 32px #4D96FF22;}
+    .fc-back {background:linear-gradient(135deg,#F0FFF4,#E0FFE8);box-shadow:0 8px 32px #6BCB7722;transform:rotateY(180deg);}
+    .fc-emoji{font-size:5.5rem;margin-bottom:8px;}
+    .fc-hint{font-size:.85rem;color:#aaa;font-weight:700;margin-top:4px;}
+    .fc-word{font-family:'Fredoka One',cursive;font-size:2.8rem;color:var(--dark);margin-bottom:4px;}
+    .fc-sub {font-size:1.1rem;color:#666;font-weight:700;}
+
+    .fc-nav{display:flex;gap:14px;justify-content:center;margin-top:8px;flex-wrap:wrap;}
+    .fc-btn{font-family:'Fredoka One',cursive;font-size:1.1rem;padding:12px 28px;border:none;
+      border-radius:50px;cursor:pointer;color:#fff;box-shadow:0 5px 0 #0002;transition:transform .15s;}
+    .fc-btn:hover{transform:translateY(-3px);}
+    .fc-btn.prev{background:linear-gradient(135deg,#888,#555);}
+    .fc-btn.flip{background:linear-gradient(135deg,var(--teal),var(--blue));}
+    .fc-btn.next{background:linear-gradient(135deg,var(--purple),var(--pink));}
+    .fc-btn.speak-fc{background:linear-gradient(135deg,var(--orange),var(--yellow));color:var(--dark);}
+
+    /* ═══ MEMORY GAME inside flashcards ═══ */
+    .memory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:600px;margin:0 auto;}
+    .mem-card{background:#fff;border-radius:16px;aspect-ratio:1;display:flex;align-items:center;
+      justify-content:center;font-size:2rem;cursor:pointer;box-shadow:0 4px 12px #0001;
+      border:3px solid transparent;transition:transform .2s,border-color .2s;user-select:none;}
+    .mem-card.hidden{background:linear-gradient(135deg,var(--blue),var(--purple));font-size:0;}
+    .mem-card:hover:not(.matched):not(.hidden){transform:scale(1.05);}
+    .mem-card.flipping{animation:flipMem .3s ease;}
+    @keyframes flipMem{0%,100%{transform:scaleX(1)}50%{transform:scaleX(0)}}
+    .mem-card.matched{border-color:var(--green);background:#E8FFF0;}
+    .mem-card.wrong-mem{border-color:var(--red);animation:shake .4s;}
+
+    /* ═══ SPEAKING ACTIVITY ═══ */
+    .speak-arena{max-width:700px;margin:0 auto;}
+    .speak-category-btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:24px;}
+    .sp-cat-btn{font-family:'Fredoka One',cursive;font-size:1rem;padding:9px 20px;border:none;
+      border-radius:50px;cursor:pointer;color:#fff;box-shadow:0 4px 0 #0002;transition:transform .15s;}
+    .sp-cat-btn:hover{transform:translateY(-2px);}
+    .sp-cat-btn.active{outline:4px solid var(--dark);}
+
+    .speak-card{background:#fff;border-radius:28px;padding:32px;text-align:center;
+      box-shadow:0 8px 32px #C77DFF22;margin-bottom:20px;}
+    .speak-prompt{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--purple);
+      background:#F5EEFF;border-radius:14px;padding:14px 20px;margin-bottom:20px;display:inline-block;}
+    .speak-emoji-big{font-size:6rem;display:block;margin-bottom:10px;animation:bounce 2s ease-in-out infinite;}
+    .speak-word-big{font-family:'Fredoka One',cursive;font-size:3.2rem;color:var(--dark);margin-bottom:4px;}
+    .speak-sub{font-size:1.1rem;color:#888;font-weight:700;margin-bottom:20px;}
+
+    .speak-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+    .sp-btn{font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px 28px;border:none;
+      border-radius:50px;cursor:pointer;color:#fff;box-shadow:0 5px 0 #0002;transition:transform .15s;}
+    .sp-btn:hover{transform:translateY(-3px);}
+    .sp-btn:active{transform:translateY(3px);}
+    .sp-listen{background:linear-gradient(135deg,var(--orange),var(--yellow));color:var(--dark);}
+    .sp-yes   {background:linear-gradient(135deg,var(--green),var(--teal));}
+    .sp-no    {background:linear-gradient(135deg,var(--red),var(--pink));}
+    .sp-next  {background:linear-gradient(135deg,var(--purple),var(--blue));}
+
+    .speak-feedback{font-family:'Fredoka One',cursive;font-size:1.5rem;text-align:center;
+      min-height:2.2rem;margin:12px 0;}
+    .speak-feedback.yes{color:var(--green);}
+    .speak-feedback.no {color:var(--orange);}
+
+    .speak-score-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:8px;}
+    .speak-score-pill{font-family:'Fredoka One',cursive;font-size:1rem;padding:8px 20px;
+      border-radius:50px;color:#fff;box-shadow:0 4px 0 #0002;}
+
+    .speak-sentence{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--purple);
+      background:#F5EEFF;border-radius:14px;padding:14px 22px;margin:16px auto;
+      display:inline-block;max-width:400px;}
+    .speak-sentence .blank{color:var(--pink);text-decoration:underline dotted;}
+
+    /* ═══ ACTIVITIES ═══ */
+    .act-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;margin-bottom:28px;}
+    .act-card{background:#fff;border-radius:22px;padding:22px 18px;box-shadow:0 6px 0 #0001,0 10px 20px #0001;
+      position:relative;overflow:hidden;cursor:pointer;transition:transform .2s;}
+    .act-card:hover{transform:translateY(-5px);}
+    .act-card::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;}
+    .a1::before{background:linear-gradient(90deg,var(--blue),var(--teal));}
+    .a2::before{background:linear-gradient(90deg,var(--purple),var(--pink));}
+    .a3::before{background:linear-gradient(90deg,var(--green),var(--teal));}
+    .a4::before{background:linear-gradient(90deg,var(--red),var(--pink));}
+    .act-icon{font-size:2.8rem;margin-bottom:9px;display:block;}
+    .act-card h3{font-family:'Fredoka One',cursive;font-size:1.45rem;color:var(--dark);margin-bottom:5px;}
+    .act-card p{color:#666;font-size:.93rem;line-height:1.5;}
+    .act-launch{font-family:'Fredoka One',cursive;font-size:.95rem;padding:9px 20px;border:none;
+      border-radius:50px;color:#fff;cursor:pointer;margin-top:12px;box-shadow:0 4px 0 #0002;transition:transform .15s;}
+    .act-launch:hover{transform:translateY(-2px);}
+
+    .game-panel{background:#fff;border-radius:28px;padding:26px 22px;
+      box-shadow:0 8px 32px #0001;margin-top:8px;display:none;}
+    .game-panel.open{display:block;animation:fadeIn .3s ease;}
+    .game-panel h3{font-family:'Fredoka One',cursive;font-size:1.7rem;text-align:center;margin-bottom:5px;}
+    .gp-sub{text-align:center;color:#777;margin-bottom:18px;font-size:.97rem;}
+
+    /* listen game */
+    .listen-q{font-family:'Fredoka One',cursive;font-size:1.45rem;
+      background:linear-gradient(135deg,#EEF6FF,#E4EEFF);border-radius:14px;
+      padding:14px 22px;text-align:center;margin-bottom:18px;color:var(--dark);}
+    .listen-opts{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:18px;}
+    .listen-opt{font-size:2.8rem;background:#f5f5f5;border:4px solid #eee;border-radius:16px;
+      width:84px;height:84px;display:flex;align-items:center;justify-content:center;
+      cursor:pointer;transition:transform .2s,border-color .2s;box-shadow:0 4px 10px #0001;}
+    .listen-opt:hover{transform:scale(1.1);border-color:var(--blue);}
+    .listen-opt.correct{border-color:var(--green);background:#E8FFF0;animation:wiggle .4s;}
+    .listen-opt.wrong  {border-color:var(--red);  background:#FFF0F0;animation:shake .4s;}
+    @keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-10deg)}75%{transform:rotate(10deg)}}
+    @keyframes shake {0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+    /* drag match */
+    .drag-arena{display:flex;gap:22px;flex-wrap:wrap;justify-content:center;}
+    .drag-col{flex:1;min-width:130px;}
+    .drag-col h4{font-family:'Fredoka One',cursive;text-align:center;margin-bottom:9px;}
+    .drag-item{font-size:2.4rem;background:#f9f9f9;border-radius:13px;padding:11px;text-align:center;
+      margin-bottom:9px;cursor:grab;border:3px solid transparent;transition:transform .2s,border-color .2s;
+      user-select:none;box-shadow:0 3px 10px #0001;}
+    .drag-item:hover{border-color:var(--purple);transform:scale(1.06);}
+    .drag-item.dragging{opacity:.4;cursor:grabbing;}
+    .drop-zone{min-height:65px;background:#f5f5f5;border-radius:13px;border:3px dashed #ccc;
+      padding:7px;text-align:center;margin-bottom:9px;display:flex;align-items:center;
+      justify-content:center;font-family:'Fredoka One',cursive;font-size:.9rem;color:#bbb;
+      transition:border-color .2s,background .2s;}
+    .drop-zone.over   {border-color:var(--purple);background:#F0E8FF;}
+    .drop-zone.matched{border-color:var(--green); background:#E8FFF0;border-style:solid;color:var(--dark);}
+    .drop-zone.wrong  {border-color:var(--red);   background:#FFF0F0;border-style:solid;}
+
+    /* trace */
+    .trace-wrap{text-align:center;}
+    .letter-row{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:14px;}
+    .letter-btn{font-family:'Fredoka One',cursive;font-size:1.1rem;width:48px;height:48px;
+      border:none;border-radius:50%;background:var(--green);color:#fff;cursor:pointer;
+      box-shadow:0 4px 0 #0002;transition:transform .15s;}
+    .letter-btn:hover{transform:translateY(-3px);}
+    .letter-btn.active{background:var(--dark);}
+    .letter-guide{font-size:7rem;font-family:'Fredoka One',cursive;opacity:.1;line-height:1;margin-bottom:-8px;}
+    #traceCanvas{border-radius:18px;background:#fff;box-shadow:0 4px 20px #0001;cursor:crosshair;max-width:100%;touch-action:none;}
+    .color-row{display:flex;gap:9px;justify-content:center;margin-top:12px;flex-wrap:wrap;}
+    .tc-btn{width:36px;height:36px;border-radius:50%;border:3px solid #fff;cursor:pointer;box-shadow:0 2px 8px #0002;transition:transform .15s;}
+    .tc-btn:hover{transform:scale(1.2);}
+    .tc-btn.active{border-color:var(--dark);}
+
+    /* sing */
+    .song-card{background:#fff;border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 4px 16px #0001;}
+    .song-card h4{font-family:'Fredoka One',cursive;font-size:1.25rem;color:var(--dark);margin-bottom:9px;}
+    .song-lyrics{font-size:.97rem;line-height:2;color:#444;font-weight:700;}
+    .song-lyrics .hl{color:var(--pink);}
+    .sing-btn{font-family:'Fredoka One',cursive;font-size:.97rem;padding:9px 22px;border:none;
+      border-radius:50px;background:linear-gradient(135deg,var(--pink),var(--red));color:#fff;
+      cursor:pointer;margin-top:10px;box-shadow:0 5px 0 #0002;transition:transform .15s;}
+    .sing-btn:hover{transform:translateY(-2px);}
+
+    /* shared */
+    .feedback-msg{font-family:'Fredoka One',cursive;font-size:1.4rem;text-align:center;min-height:2.1rem;}
+    .feedback-msg.correct{color:var(--green);}
+    .feedback-msg.wrong  {color:var(--red);}
+    .game-btn{font-family:'Fredoka One',cursive;font-size:1.05rem;padding:11px 28px;border:none;
+      border-radius:50px;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;
+      cursor:pointer;box-shadow:0 5px 0 #0002;margin-top:12px;transition:transform .15s;
+      display:block;margin-left:auto;margin-right:auto;}
+    .game-btn:hover{transform:translateY(-3px);}
+    .score-badge{display:inline-block;background:linear-gradient(135deg,var(--yellow),var(--orange));
+      color:#fff;font-family:'Fredoka One',cursive;font-size:.97rem;padding:7px 18px;
+      border-radius:50px;box-shadow:0 4px 0 #0002;}
+
+    /* star pop */
+    .star-pop{position:fixed;pointer-events:none;font-size:2rem;z-index:9998;animation:starFloat 1.2s ease-out forwards;}
+    @keyframes starFloat{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-110px) scale(1.6)}}
+
+    /* footer */
+    footer{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;text-align:center;
+      padding:36px 20px;clip-path:ellipse(110% 100% at 50% 100%);}
+    footer .fe{font-size:2.2rem;display:block;margin-bottom:6px;}
+    footer p{font-family:'Fredoka One',cursive;font-size:1.05rem;opacity:.92;}
+    footer small{font-size:.8rem;opacity:.75;display:block;margin-top:6px;line-height:1.7;}
+
+    @media(max-width:480px){
+      .card-grid{grid-template-columns:repeat(2,1fr);}
+      .drag-arena{flex-direction:column;}
+      .flashcard{width:280px;height:200px;}
+      .memory-grid{grid-template-columns:repeat(4,1fr);}
+    }
+  </style>
+</head>
+<body>
+
+<!-- WELCOME -->
+<div id="welcome">
+  <span class="we">🌈</span>
+  <h1>See It, Hear It, Say It!</h1>
+  <p class="ws">A fun English learning adventure for little kids! 🎉<br/>Tap pictures, flip cards, and practice speaking!</p>
+  <div class="badges">
+    <span class="wbadge">👂 Listen</span><span class="wbadge">🗣️ Speak</span>
+    <span class="wbadge">🃏 Flashcards</span><span class="wbadge">🎮 Play</span><span class="wbadge">🎵 Sing</span>
+  </div>
+  <p class="ws" style="font-size:.88rem;opacity:.8;">Ages 2–5 · Pre-A1 · Early English Exposure</p>
+  <button class="start-btn" onclick="startApp()">▶ Let's Play!</button>
+</div>
+
+<!-- HEADER -->
+<header>
+  <span class="hero-e">🌈</span>
+  <h1>See It, Hear It, Say It!</h1>
+  <p>✨ Learn English with Fun & Colors! ✨</p>
+</header>
+
+<!-- SCORE BAR -->
+<div class="score-bar">
+  <span class="spill s1">⭐ Stars: <span id="totalStars">0</span></span>
+  <span class="spill s2">🔥 Streak: <span id="streak">0</span></span>
+  <span class="spill s3">📚 Words: <span id="wordsLearned">0</span></span>
+</div>
+
+<!-- NAV -->
+<nav>
+  <button class="tab active" data-tab="colors">🎨 Colors</button>
+  <button class="tab" data-tab="animals">🐾 Animals</button>
+  <button class="tab" data-tab="numbers">🔢 Numbers</button>
+  <button class="tab" data-tab="objects">🧸 Objects</button>
+  <button class="tab" data-tab="body">👁️ Body</button>
+  <button class="tab" data-tab="food">🍎 Food</button>
+  <button class="tab" data-tab="flashcards">🃏 Flashcards</button>
+  <button class="tab" data-tab="speaking">🗣️ Speaking</button>
+  <button class="tab" data-tab="activities">🎮 Activities</button>
+</nav>
+
+<!-- COLORS -->
+<section id="colors" class="active">
+  <h2 class="sec-title">🎨 Colors</h2>
+  <p class="sec-tip">👆 Tap a color to hear it!</p>
+  <div class="card-grid" id="colors-grid"></div>
+</section>
+
+<!-- ANIMALS -->
+<section id="animals">
+  <h2 class="sec-title">🐾 Animals</h2>
+  <p class="sec-tip">👆 Tap an animal to hear it!</p>
+  <span class="cat-lbl" style="background:linear-gradient(135deg,var(--green),var(--teal));">🏠 Pet Animals</span>
+  <div class="card-grid" id="g-pets"></div>
+  <span class="cat-lbl" style="background:linear-gradient(135deg,var(--orange),var(--yellow));color:var(--dark);">🌿 Wild Animals</span>
+  <div class="card-grid" id="g-wild"></div>
+  <span class="cat-lbl" style="background:linear-gradient(135deg,var(--blue),var(--teal));">🌊 Ocean & Farm</span>
+  <div class="card-grid" id="g-ocean"></div>
+</section>
+
+<!-- NUMBERS -->
+<section id="numbers">
+  <h2 class="sec-title">🔢 Numbers</h2>
+  <p class="sec-tip">👆 Tap a number to hear it!</p>
+  <div class="card-grid" id="g-numbers"></div>
+</section>
+
+<!-- OBJECTS -->
+<section id="objects">
+  <h2 class="sec-title">🧸 Everyday Objects</h2>
+  <p class="sec-tip">👆 Tap an object to hear it!</p>
+  <span class="cat-lbl" style="background:linear-gradient(135deg,var(--orange),var(--yellow));color:var(--dark);">🏫 School</span>
+  <div class="card-grid" id="g-school"></div>
+  <span class="cat-lbl" style="background:linear-gradient(135deg,var(--blue),var(--purple));">🏠 Home</span>
+  <div class="card-grid" id="g-home"></div>
+  <span class="cat-lbl" style="background:linear-gradient(135deg,var(--pink),var(--red));">🎠 Toys & Play</span>
+  <div class="card-grid" id="g-toys"></div>
+</section>
+
+<!-- BODY -->
+<section id="body">
+  <h2 class="sec-title">👁️ My Body</h2>
+  <p class="sec-tip">👆 Tap a body part to hear it!</p>
+  <div class="card-grid" id="g-body"></div>
+</section>
+
+<!-- FOOD -->
+<section id="food">
+  <h2 class="sec-title">🍎 Food & Drinks</h2>
+  <p class="sec-tip">👆 Tap a food to hear it!</p>
+  <span class="cat-lbl" style="background:linear-gradient(135deg,var(--green),var(--teal));">🍓 Fruits & Veggies</span>
+  <div class="card-grid" id="g-fruits"></div>
+  <span class="cat-lbl" style="background:linear-gradient(135deg,var(--orange),var(--yellow));color:var(--dark);">🥪 Meals & Drinks</span>
+  <div class="card-grid" id="g-meals"></div>
+</section>
+
+<!-- FLASHCARDS -->
+<section id="flashcards">
+  <h2 class="sec-title">🃏 Flashcards</h2>
+  <p class="sec-tip">Tap the card to flip it! See the word and hear it! 🔊</p>
+  <div class="fc-controls" id="fc-cats"></div>
+  <div class="fc-arena">
+    <div class="fc-progress">Card <span id="fc-cur">1</span> of <span id="fc-total">1</span></div>
+    <div class="flashcard" id="flashcard" onclick="flipCard()">
+      <div class="fc-inner" id="fc-inner">
+        <div class="fc-front">
+          <span class="fc-emoji" id="fc-emoji">🐱</span>
+          <span class="fc-hint">👆 Tap to flip!</span>
+        </div>
+        <div class="fc-back">
+          <div class="fc-word" id="fc-word">Cat</div>
+          <div class="fc-sub"  id="fc-sub">Gato</div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-nav">
+      <button class="fc-btn prev" onclick="fcNav(-1)">◀ Back</button>
+      <button class="fc-btn speak-fc" onclick="fcSpeak()">🔊 Listen</button>
+      <button class="fc-btn flip" onclick="flipCard()">🔄 Flip</button>
+      <button class="fc-btn next" onclick="fcNav(1)">Next ▶</button>
+    </div>
+  </div>
+</section>
+
+<!-- SPEAKING -->
+<section id="speaking">
+  <h2 class="sec-title">🗣️ Speaking Practice</h2>
+  <p class="sec-tip">Listen, then say it! Tap ✅ if you said it right, or ❌ to try again!</p>
+  <div class="speak-arena">
+    <div class="speak-category-btns" id="sp-cats"></div>
+    <div class="speak-card">
+      <div class="speak-prompt" id="sp-prompt">🗣️ Say it out loud:</div>
+      <span class="speak-emoji-big" id="sp-emoji">🐱</span>
+      <div class="speak-word-big" id="sp-word">Cat</div>
+      <div class="speak-sub" id="sp-sub">Gato</div>
+      <div class="speak-sentence" id="sp-sentence">This is a <span class="blank">Cat</span> 🐱</div>
+      <div class="speak-btns">
+        <button class="sp-btn sp-listen" onclick="spListen()">🔊 Listen First</button>
+        <button class="sp-btn sp-yes" onclick="spCheck(true)">✅ I said it!</button>
+        <button class="sp-btn sp-no"  onclick="spCheck(false)">❌ Try again</button>
+        <button class="sp-btn sp-next" onclick="spNext()">▶ Next Word</button>
+      </div>
+    </div>
+    <div class="speak-feedback" id="sp-fb"></div>
+    <div class="speak-score-row">
+      <span class="speak-score-pill" style="background:linear-gradient(135deg,var(--green),var(--teal));">✅ Got it: <span id="sp-correct">0</span></span>
+      <span class="speak-score-pill" style="background:linear-gradient(135deg,var(--orange),var(--yellow));color:var(--dark);">🔄 Practiced: <span id="sp-total">0</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ACTIVITIES -->
+<section id="activities">
+  <h2 class="sec-title">🎮 Fun Activities!</h2>
+  <p class="sec-tip">Pick an activity and play!</p>
+  <div class="act-grid">
+    <div class="act-card a1" onclick="openGame('listen-game')">
+      <span class="act-icon">👂</span><h3>Listen & Touch</h3>
+      <p>Hear a word and tap the right picture!</p>
+      <button class="act-launch" style="background:linear-gradient(135deg,var(--blue),var(--teal));">▶ Play!</button>
+    </div>
+    <div class="act-card a2" onclick="openGame('drag-game')">
+      <span class="act-icon">🧩</span><h3>Drag & Match</h3>
+      <p>Drag the emoji to the matching word!</p>
+      <button class="act-launch" style="background:linear-gradient(135deg,var(--purple),var(--pink));">▶ Play!</button>
+    </div>
+    <div class="act-card a3" onclick="openGame('trace-game')">
+      <span class="act-icon">✏️</span><h3>Trace & Play</h3>
+      <p>Draw letters with your finger or mouse!</p>
+      <button class="act-launch" style="background:linear-gradient(135deg,var(--green),var(--teal));">▶ Play!</button>
+    </div>
+    <div class="act-card a4" onclick="openGame('sing-game')">
+      <span class="act-icon">🎵</span><h3>Sing Along</h3>
+      <p>Sing fun songs about colors, animals and more!</p>
+      <button class="act-launch" style="background:linear-gradient(135deg,var(--pink),var(--red));">▶ Play!</button>
+    </div>
+  </div>
+
+  <!-- LISTEN & TOUCH -->
+  <div class="game-panel" id="listen-game">
+    <h3 style="color:var(--blue);">👂 Listen & Touch</h3>
+    <p class="gp-sub">Read the word and tap the right picture!</p>
+    <div class="listen-q" id="listen-q">?</div>
+    <div class="listen-opts" id="listen-opts"></div>
+    <div class="feedback-msg" id="listen-fb"></div>
+    <div style="text-align:center;margin-top:8px;"><span class="score-badge">⭐ Score: <span id="listen-score">0</span></span></div>
+    <button class="game-btn" onclick="nextListenQ()">▶ Next Question!</button>
+    <button class="game-btn" style="background:linear-gradient(135deg,#888,#555);margin-top:8px;" onclick="closeGame('listen-game')">✖ Close</button>
+  </div>
+
+  <!-- DRAG & MATCH -->
+  <div class="game-panel" id="drag-game">
+    <h3 style="color:var(--purple);">🧩 Drag & Match</h3>
+    <p class="gp-sub">Drag each emoji to the correct box!</p>
+    <div class="drag-arena">
+      <div class="drag-col"><h4>🖱️ Drag these!</h4><div id="drag-items"></div></div>
+      <div class="drag-col"><h4>📦 Drop here!</h4><div id="drop-zones"></div></div>
+    </div>
+    <div class="feedback-msg" id="drag-fb" style="margin-top:12px;"></div>
+    <div style="text-align:center;">
+      <button class="game-btn" style="background:linear-gradient(135deg,var(--purple),var(--pink));margin-top:8px;" onclick="resetDrag()">🔄 New Round!</button>
+      <button class="game-btn" style="background:linear-gradient(135deg,#888,#555);margin-top:8px;" onclick="closeGame('drag-game')">✖ Close</button>
+    </div>
+  </div>
+
+  <!-- TRACE & PLAY -->
+  <div class="game-panel" id="trace-game">
+    <h3 style="color:var(--green);">✏️ Trace & Play</h3>
+    <p class="gp-sub">Pick a letter and draw it!</p>
+    <div class="trace-wrap">
+      <div class="letter-row" id="letter-btns"></div>
+      <div class="letter-guide" id="letter-guide">A</div>
+      <canvas id="traceCanvas" width="520" height="200"></canvas>
+      <div class="color-row">
+        <button class="tc-btn active" data-color="#FF6FB7" style="background:#FF6FB7;"></button>
+        <button class="tc-btn" data-color="#4D96FF"  style="background:#4D96FF;"></button>
+        <button class="tc-btn" data-color="#6BCB77"  style="background:#6BCB77;"></button>
+        <button class="tc-btn" data-color="#FFD93D"  style="background:#FFD93D;"></button>
+        <button class="tc-btn" data-color="#C77DFF"  style="background:#C77DFF;"></button>
+        <button class="tc-btn" data-color="#FF922B"  style="background:#FF922B;"></button>
+        <button class="tc-btn" data-color="#2D2D2D"  style="background:#2D2D2D;"></button>
+        <button class="game-btn" style="font-size:.88rem;padding:8px 16px;margin:0;" onclick="clearCanvas()">🧹 Clear</button>
+      </div>
+    </div>
+    <button class="game-btn" style="background:linear-gradient(135deg,#888,#555);margin-top:16px;" onclick="closeGame('trace-game')">✖ Close</button>
+  </div>
+
+  <!-- SING ALONG -->
+  <div class="game-panel" id="sing-game">
+    <h3 style="color:var(--pink);">🎵 Sing Along!</h3>
+    <p class="gp-sub">Sing these fun songs with your class! 🎤</p>
+    <div class="song-card">
+      <h4>🌈 The Color Song</h4>
+      <div class="song-lyrics">
+        <span class="hl">Red</span>, red, I see <span class="hl">red</span>! 🔴 &nbsp;<span class="hl">Blue</span>, blue, the sky is <span class="hl">blue</span>! 🔵<br/>
+        <span class="hl">Yellow</span> sunshine shining bright ☀️ &nbsp;<span class="hl">Green</span>, green the trees at night! 🌳<br/>
+        <span class="hl">Orange</span> like a yummy fruit 🍊 &nbsp;<span class="hl">Purple</span> grapes are so cute! 🍇<br/>
+        Colors, colors all around — colors, colors can be found! 🌈
+      </div>
+      <button class="sing-btn" onclick="speak('Red red I see red! Blue blue the sky is blue! Yellow sunshine shining bright! Green green the trees at night! Orange like a yummy fruit! Purple grapes are so cute! Colors colors all around, colors colors can be found!')">▶ Sing it!</button>
+    </div>
+    <div class="song-card">
+      <h4>🐾 The Animal Song</h4>
+      <div class="song-lyrics">
+        🐱 The <span class="hl">cat</span> says meow! &nbsp;🐶 The <span class="hl">dog</span> says woof!<br/>
+        🐸 The <span class="hl">frog</span> goes ribbit! &nbsp;🐄 The <span class="hl">cow</span> goes moo!<br/>
+        🦁 The <span class="hl">lion</span> goes roar! &nbsp;🐘 The <span class="hl">elephant</span> stomps too!<br/>
+        All the animals make their sound — animals, animals all around! 🐾
+      </div>
+      <button class="sing-btn" onclick="speak('The cat says meow! The dog says woof! The frog goes ribbit! The cow goes moo! The lion goes roar! The elephant stomps too! All the animals make their sound, animals animals all around!')">▶ Sing it!</button>
+    </div>
+    <div class="song-card">
+      <h4>🔢 The Number Song</h4>
+      <div class="song-lyrics">
+        <span class="hl">One</span>, <span class="hl">two</span>, <span class="hl">three</span> — clap with me! 👏<br/>
+        <span class="hl">Four</span>, <span class="hl">five</span>, <span class="hl">six</span> — pick up sticks! 🪵<br/>
+        <span class="hl">Seven</span>, <span class="hl">eight</span>, <span class="hl">nine</span> — everything's fine! ✨<br/>
+        <span class="hl">Ten</span>, <span class="hl">eleven</span>, <span class="hl">twelve</span> — books on the shelf! 📚<br/>
+        <span class="hl">Thirteen</span> to <span class="hl">twenty</span> — that's plenty! 🎉
+      </div>
+      <button class="sing-btn" onclick="speak('One two three clap with me! Four five six pick up sticks! Seven eight nine everything is fine! Ten eleven twelve books on the shelf! Thirteen to twenty, that is plenty!')">▶ Sing it!</button>
+    </div>
+    <div class="song-card">
+      <h4>🍎 The Food Song</h4>
+      <div class="song-lyrics">
+        🍎 <span class="hl">Apple</span>, apple, red and round! &nbsp;🍌 <span class="hl">Banana</span>, yellow found!<br/>
+        🍊 <span class="hl">Orange</span>, juicy and sweet! &nbsp;🍓 <span class="hl">Strawberry</span>, yummy treat!<br/>
+        🥛 <span class="hl">Milk</span>, milk, good for me! &nbsp;🍞 <span class="hl">Bread</span>, bread, yum yum yum!<br/>
+        Eat your food and grow up strong — sing the food song all day long! 💪
+      </div>
+      <button class="sing-btn" onclick="speak('Apple apple red and round! Banana yellow found! Orange juicy and sweet! Strawberry yummy treat! Milk milk good for me! Bread bread yum yum yum! Eat your food and grow up strong, sing the food song all day long!')">▶ Sing it!</button>
+    </div>
+    <div class="song-card">
+      <h4>👁️ My Body Song</h4>
+      <div class="song-lyrics">
+        <span class="hl">Head</span> and <span class="hl">shoulders</span>, <span class="hl">knees</span> and <span class="hl">toes</span>!<br/>
+        <span class="hl">Eyes</span> and <span class="hl">ears</span> and <span class="hl">mouth</span> and <span class="hl">nose</span>!<br/>
+        <span class="hl">Hands</span> go clap and <span class="hl">feet</span> go stomp!<br/>
+        Touch your <span class="hl">tummy</span>, give a jump! 🎉
+      </div>
+      <button class="sing-btn" onclick="speak('Head and shoulders knees and toes, knees and toes! Eyes and ears and mouth and nose! Hands go clap and feet go stomp! Touch your tummy give a jump!')">▶ Sing it!</button>
+    </div>
+    <button class="game-btn" style="background:linear-gradient(135deg,#888,#555);" onclick="closeGame('sing-game')">✖ Close</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="fe">🌟</span>
+  <p>Great job, little learner! Keep going! 🚀</p>
+  <small>
+    See It, Hear It, Say It! · Technology in Foreign Language Teaching<br/>
+    Students: Diana Carolina Acevedo Mouawd &amp; Richard Jesús Riaño Peña<br/>
+    Support Teacher: Valeria Maria Eraso Ibarra · Licenciatura en Lenguas Extranjeras con Énfasis en Inglés
+  </small>
+</footer>
+
+<script>
+// ════════════ DATA ════════════
+const COLORS=[
+  {sw:'#FF4D6D',word:'Red',      sub:'Rojo'},
+  {sw:'#4D96FF',word:'Blue',     sub:'Azul'},
+  {sw:'#FFD93D',word:'Yellow',   sub:'Amarillo'},
+  {sw:'#6BCB77',word:'Green',    sub:'Verde'},
+  {sw:'#FF922B',word:'Orange',   sub:'Naranja'},
+  {sw:'#C77DFF',word:'Purple',   sub:'Morado'},
+  {sw:'#FF6FB7',word:'Pink',     sub:'Rosado'},
+  {sw:'#FFFFFF',word:'White',    sub:'Blanco'},
+  {sw:'#2D2D2D',word:'Black',    sub:'Negro'},
+  {sw:'#8B4513',word:'Brown',    sub:'Marrón'},
+  {sw:'#A0A0A0',word:'Gray',     sub:'Gris'},
+  {sw:'#38D9A9',word:'Teal',     sub:'Verde agua'},
+  {sw:'#FF6B35',word:'Coral',    sub:'Coral'},
+  {sw:'#FFD700',word:'Gold',     sub:'Dorado'},
+  {sw:'#C0C0C0',word:'Silver',   sub:'Plateado'},
+  {sw:'#87CEEB',word:'Sky Blue', sub:'Azul cielo'},
+  {sw:'#90EE90',word:'Light Green',sub:'Verde claro'},
+  {sw:'#DDA0DD',word:'Violet',   sub:'Violeta'},
+  {sw:'#F5DEB3',word:'Beige',    sub:'Beige'},
+  {sw:'#FF1493',word:'Hot Pink', sub:'Rosa fuerte'},
+  {sw:'#00CED1',word:'Turquoise',sub:'Turquesa'},
+  {sw:'#DC143C',word:'Crimson',  sub:'Carmesí'},
+  {sw:'#228B22',word:'Dark Green',sub:'Verde oscuro'},
+  {sw:'#000080',word:'Navy',     sub:'Azul marino'},
+  {sw:'#FF7F50',word:'Peach',    sub:'Melocotón'},
+  {sw:'#E6E6FA',word:'Lavender', sub:'Lavanda'},
+  {sw:'#FFFFE0',word:'Cream',    sub:'Crema'},
+  {sw:'#8FBC8F',word:'Mint',     sub:'Menta'},
+  {sw:'#B22222',word:'Dark Red', sub:'Rojo oscuro'},
+  {sw:'#4169E1',word:'Royal Blue',sub:'Azul real'},
+  {sw:'#DAA520',word:'Amber',    sub:'Ámbar'},
+];
+const PETS=[
+  {e:'🐱',word:'Cat',    sub:'Gato'},
+  {e:'🐶',word:'Dog',    sub:'Perro'},
+  {e:'🐰',word:'Rabbit', sub:'Conejo'},
+  {e:'🐹',word:'Hamster',sub:'Hámster'},
+  {e:'🐟',word:'Fish',   sub:'Pez'},
+  {e:'🦜',word:'Parrot', sub:'Loro'},
+  {e:'🐢',word:'Turtle', sub:'Tortuga'},
+  {e:'🐾',word:'Puppy',  sub:'Cachorro'},
+  {e:'🐈',word:'Kitten', sub:'Gatito'},
+  {e:'🐇',word:'Bunny',  sub:'Conejito'},
+];
+const WILD=[
+  {e:'🦁',word:'Lion',      sub:'León'},
+  {e:'🐘',word:'Elephant',  sub:'Elefante'},
+  {e:'🦒',word:'Giraffe',   sub:'Jirafa'},
+  {e:'🐻',word:'Bear',      sub:'Oso'},
+  {e:'🦊',word:'Fox',       sub:'Zorro'},
+  {e:'🐺',word:'Wolf',      sub:'Lobo'},
+  {e:'🦓',word:'Zebra',     sub:'Cebra'},
+  {e:'🐯',word:'Tiger',     sub:'Tigre'},
+  {e:'🦋',word:'Butterfly', sub:'Mariposa'},
+  {e:'🐸',word:'Frog',      sub:'Rana'},
+  {e:'🦅',word:'Eagle',     sub:'Águila'},
+  {e:'🦔',word:'Hedgehog',  sub:'Erizo'},
+  {e:'🦘',word:'Kangaroo',  sub:'Canguro'},
+  {e:'🐍',word:'Snake',     sub:'Serpiente'},
+  {e:'🦏',word:'Rhino',     sub:'Rinoceronte'},
+];
+const OCEAN=[
+  {e:'🐄',word:'Cow',      sub:'Vaca'},
+  {e:'🐷',word:'Pig',      sub:'Cerdo'},
+  {e:'🐔',word:'Chicken',  sub:'Pollo'},
+  {e:'🐑',word:'Sheep',    sub:'Oveja'},
+  {e:'🐴',word:'Horse',    sub:'Caballo'},
+  {e:'🦆',word:'Duck',     sub:'Pato'},
+  {e:'🐠',word:'Clownfish',sub:'Pez payaso'},
+  {e:'🐬',word:'Dolphin',  sub:'Delfín'},
+  {e:'🦈',word:'Shark',    sub:'Tiburón'},
+  {e:'🐙',word:'Octopus',  sub:'Pulpo'},
+  {e:'🐧',word:'Penguin',  sub:'Pingüino'},
+  {e:'🐳',word:'Whale',    sub:'Ballena'},
+];
+const NUMBERS=[
+  {e:'1️⃣',word:'One',     sub:'Uno'},
+  {e:'2️⃣',word:'Two',     sub:'Dos'},
+  {e:'3️⃣',word:'Three',   sub:'Tres'},
+  {e:'4️⃣',word:'Four',    sub:'Cuatro'},
+  {e:'5️⃣',word:'Five',    sub:'Cinco'},
+  {e:'6️⃣',word:'Six',     sub:'Seis'},
+  {e:'7️⃣',word:'Seven',   sub:'Siete'},
+  {e:'8️⃣',word:'Eight',   sub:'Ocho'},
+  {e:'9️⃣',word:'Nine',    sub:'Nueve'},
+  {e:'🔟',word:'Ten',      sub:'Diez'},
+  {e:'🔢',word:'Eleven',   sub:'Once'},
+  {e:'🔢',word:'Twelve',   sub:'Doce'},
+  {e:'🔢',word:'Thirteen', sub:'Trece'},
+  {e:'🔢',word:'Fourteen', sub:'Catorce'},
+  {e:'🔢',word:'Fifteen',  sub:'Quince'},
+  {e:'🔢',word:'Sixteen',  sub:'Dieciséis'},
+  {e:'🔢',word:'Seventeen',sub:'Diecisiete'},
+  {e:'🔢',word:'Eighteen', sub:'Dieciocho'},
+  {e:'🔢',word:'Nineteen', sub:'Diecinueve'},
+  {e:'2️⃣0️⃣',word:'Twenty', sub:'Veinte'},
+];
+const SCHOOL=[
+  {e:'📚',word:'Book',     sub:'Libro'},
+  {e:'✏️',word:'Pencil',   sub:'Lápiz'},
+  {e:'🖊️',word:'Pen',      sub:'Bolígrafo'},
+  {e:'📏',word:'Ruler',    sub:'Regla'},
+  {e:'🎒',word:'Backpack', sub:'Mochila'},
+  {e:'📐',word:'Triangle', sub:'Escuadra'},
+  {e:'🗂️',word:'Folder',   sub:'Carpeta'},
+  {e:'🖍️',word:'Crayon',   sub:'Crayón'},
+  {e:'✂️',word:'Scissors', sub:'Tijeras'},
+  {e:'🖥️',word:'Computer', sub:'Computador'},
+  {e:'📓',word:'Notebook', sub:'Cuaderno'},
+];
+const HOME=[
+  {e:'🏠',word:'House',   sub:'Casa'},
+  {e:'🛏️',word:'Bed',     sub:'Cama'},
+  {e:'🪑',word:'Chair',   sub:'Silla'},
+  {e:'🚪',word:'Door',    sub:'Puerta'},
+  {e:'🪟',word:'Window',  sub:'Ventana'},
+  {e:'🛁',word:'Bathtub', sub:'Bañera'},
+  {e:'🪴',word:'Plant',   sub:'Planta'},
+  {e:'💡',word:'Lamp',    sub:'Lámpara'},
+  {e:'📺',word:'TV',      sub:'Televisor'},
+  {e:'🛋️',word:'Sofa',    sub:'Sofá'},
+  {e:'🍽️',word:'Plate',   sub:'Plato'},
+];
+const TOYS=[
+  {e:'🧸',word:'Teddy Bear',sub:'Oso de peluche'},
+  {e:'⚽',word:'Ball',      sub:'Pelota'},
+  {e:'🎨',word:'Paints',    sub:'Pinturas'},
+  {e:'🪀',word:'Yo-yo',     sub:'Yoyó'},
+  {e:'🎮',word:'Game',      sub:'Juego'},
+  {e:'🛷',word:'Sled',      sub:'Trineo'},
+  {e:'🪁',word:'Slingshot', sub:'Resortera'},
+  {e:'🎪',word:'Circus',    sub:'Circo'},
+  {e:'🎡',word:'Ferris Wheel',sub:'Rueda'},
+  {e:'🎠',word:'Carousel',  sub:'Carrusel'},
+];
+const BODY=[
+  {e:'👁️',word:'Eye',      sub:'Ojo'},
+  {e:'👂',word:'Ear',      sub:'Oreja'},
+  {e:'👃',word:'Nose',     sub:'Nariz'},
+  {e:'👄',word:'Mouth',    sub:'Boca'},
+  {e:'🦷',word:'Tooth',    sub:'Diente'},
+  {e:'👅',word:'Tongue',   sub:'Lengua'},
+  {e:'🤚',word:'Hand',     sub:'Mano'},
+  {e:'🦶',word:'Foot',     sub:'Pie'},
+  {e:'💪',word:'Arm',      sub:'Brazo'},
+  {e:'🦵',word:'Leg',      sub:'Pierna'},
+  {e:'🧠',word:'Brain',    sub:'Cerebro'},
+  {e:'❤️',word:'Heart',    sub:'Corazón'},
+  {e:'🦴',word:'Bone',     sub:'Hueso'},
+  {e:'🦱',word:'Hair',     sub:'Cabello'},
+  {e:'🫲',word:'Shoulder', sub:'Hombro'},
+  {e:'🥺',word:'Face',     sub:'Cara'},
+  {e:'👦',word:'Boy',      sub:'Niño'},
+  {e:'👧',word:'Girl',     sub:'Niña'},
+  {e:'👶',word:'Baby',     sub:'Bebé'},
+  {e:'👨',word:'Man',      sub:'Hombre'},
+  {e:'👩',word:'Woman',    sub:'Mujer'},
+  {e:'👴',word:'Grandpa',  sub:'Abuelo'},
+  {e:'👵',word:'Grandma',  sub:'Abuela'},
+  {e:'🫀',word:'Stomach',  sub:'Estómago'},
+  {e:'🤲',word:'Fingers',  sub:'Dedos'},
+  {e:'🧑',word:'Child',    sub:'Niño/a'},
+  {e:'🫁',word:'Lungs',    sub:'Pulmones'},
+  {e:'🦶',word:'Toes',     sub:'Dedos del pie'},
+  {e:'🫳',word:'Back',     sub:'Espalda'},
+  {e:'🧒',word:'Person',   sub:'Persona'},
+];
+const FRUITS=[
+  {e:'🍎',word:'Apple',      sub:'Manzana'},
+  {e:'🍌',word:'Banana',     sub:'Banano'},
+  {e:'🍊',word:'Orange',     sub:'Naranja'},
+  {e:'🍓',word:'Strawberry', sub:'Fresa'},
+  {e:'🍇',word:'Grapes',     sub:'Uvas'},
+  {e:'🍉',word:'Watermelon', sub:'Sandía'},
+  {e:'🍑',word:'Peach',      sub:'Durazno'},
+  {e:'🍋',word:'Lemon',      sub:'Limón'},
+  {e:'🍍',word:'Pineapple',  sub:'Piña'},
+  {e:'🥭',word:'Mango',      sub:'Mango'},
+  {e:'🍒',word:'Cherry',     sub:'Cereza'},
+  {e:'🫐',word:'Blueberry',  sub:'Arándano'},
+  {e:'🥝',word:'Kiwi',       sub:'Kiwi'},
+  {e:'🥕',word:'Carrot',     sub:'Zanahoria'},
+  {e:'🥦',word:'Broccoli',   sub:'Brócoli'},
+  {e:'🌽',word:'Corn',       sub:'Maíz'},
+  {e:'🥑',word:'Avocado',    sub:'Aguacate'},
+  {e:'🍅',word:'Tomato',     sub:'Tomate'},
+];
+const MEALS=[
+  {e:'🥛',word:'Milk',      sub:'Leche'},
+  {e:'🍞',word:'Bread',     sub:'Pan'},
+  {e:'🍳',word:'Egg',       sub:'Huevo'},
+  {e:'🍚',word:'Rice',      sub:'Arroz'},
+  {e:'🍝',word:'Pasta',     sub:'Pasta'},
+  {e:'🧀',word:'Cheese',    sub:'Queso'},
+  {e:'🍗',word:'Chicken',   sub:'Pollo'},
+  {e:'🥗',word:'Salad',     sub:'Ensalada'},
+  {e:'🥪',word:'Sandwich',  sub:'Sándwich'},
+  {e:'🍕',word:'Pizza',     sub:'Pizza'},
+  {e:'🍪',word:'Cookie',    sub:'Galleta'},
+  {e:'🎂',word:'Cake',      sub:'Torta'},
+  {e:'🍦',word:'Ice Cream', sub:'Helado'},
+  {e:'🧃',word:'Juice',     sub:'Jugo'},
+  {e:'💧',word:'Water',     sub:'Agua'},
+  {e:'🍫',word:'Chocolate', sub:'Chocolate'},
+  {e:'🥞',word:'Pancake',   sub:'Pancake'},
+  {e:'🍜',word:'Soup',      sub:'Sopa'},
+];
+
+// ════════════ PHONETIC MAP ════════════
+const PH={
+  red:'rehd',blue:'bloo',yellow:'yeh-low',green:'green',orange:'or-inj',
+  purple:'pur-pul',pink:'pink',white:'wyte',black:'blak',brown:'brown',
+  gray:'gray',teal:'teel',coral:'kor-ul',gold:'gold',silver:'sil-ver',
+  violet:'vy-oh-let',beige:'bayj',turquoise:'tur-kwoyz',crimson:'krim-sun',
+  navy:'nay-vee',peach:'peech',lavender:'lav-en-der',cream:'kreem',mint:'mint',
+  amber:'am-ber','sky blue':'sky bloo','light green':'lyte green',
+  'hot pink':'hot pink','dark green':'dark green','dark red':'dark red',
+  'royal blue':'roy-ul bloo',
+  cat:'kat',dog:'dawg',rabbit:'rab-it',hamster:'ham-ster',fish:'fish',
+  parrot:'pair-ut',turtle:'tur-tul',puppy:'pup-ee',kitten:'kit-en',bunny:'bun-ee',
+  lion:'ly-un',elephant:'el-eh-funt',giraffe:'jih-raf',bear:'bair',fox:'foks',
+  wolf:'wulf',zebra:'zee-bruh',tiger:'ty-ger',butterfly:'but-er-fly',
+  frog:'frawg',eagle:'ee-gul',hedgehog:'hej-hog',kangaroo:'kang-guh-roo',
+  snake:'snayk',rhino:'ry-no',cow:'kow',pig:'pig',chicken:'chik-en',
+  sheep:'sheep',horse:'hors',duck:'duk',clownfish:'klown-fish',
+  dolphin:'dol-fin',shark:'shark',octopus:'ok-toh-pus',penguin:'pen-gwin',
+  whale:'wayl',
+  one:'wun',two:'too',three:'three',four:'for',five:'fyve',six:'siks',
+  seven:'seh-ven',eight:'ayt',nine:'nyne',ten:'ten',eleven:'ih-lev-en',
+  twelve:'twelv',thirteen:'thur-teen',fourteen:'for-teen',fifteen:'fif-teen',
+  sixteen:'siks-teen',seventeen:'sev-en-teen',eighteen:'ay-teen',
+  nineteen:'nyn-teen',twenty:'twen-tee',
+  book:'buk',pencil:'pen-sul',pen:'pen',ruler:'roo-ler',backpack:'bak-pak',
+  folder:'fohl-der',crayon:'kray-on',scissors:'siz-erz',computer:'kom-pyoo-ter',
+  notebook:'note-buk',house:'howss',bed:'bed',chair:'chair',door:'dor',
+  window:'win-doh',bathtub:'bath-tub',plant:'plant',lamp:'lamp',sofa:'soh-fah',
+  plate:'playt','teddy bear':'ted-ee bair',ball:'bawl',paints:'paynts',
+  game:'gaym',sled:'sled','ferris wheel':'fair-is wheel',carousel:'kair-oh-sel',
+  eye:'eye',ear:'eer',nose:'nohz',mouth:'mowth',tooth:'tooth',tongue:'tung',
+  hand:'hand',foot:'fut',arm:'arm',leg:'leg',brain:'brayn',heart:'hart',
+  bone:'bohn',hair:'hair',shoulder:'shohl-der',face:'fayss',boy:'boy',
+  girl:'girl',baby:'bay-bee',man:'man',woman:'wum-an',grandpa:'grand-pah',
+  grandma:'grand-mah',stomach:'stum-uk',fingers:'fing-gerz',child:'chyld',
+  lungs:'lungz',toes:'tohz',back:'bak',person:'pur-sun',
+  apple:'ap-ul',banana:'bah-nan-ah',strawberry:'straw-behr-ee',grapes:'grayps',
+  watermelon:'waw-ter-mel-un',lemon:'lem-un',pineapple:'pyn-ap-ul',mango:'mang-goh',
+  cherry:'chehr-ee',blueberry:'bloo-behr-ee',kiwi:'kee-wee',carrot:'kair-ut',
+  broccoli:'brok-oh-lee',corn:'korn',avocado:'av-oh-kah-doh',tomato:'toh-may-toh',
+  milk:'milk',bread:'bred',egg:'eg',rice:'ryss',pasta:'pah-stah',cheese:'cheez',
+  salad:'sal-ad',sandwich:'sand-wich',pizza:'peet-zah',cookie:'kuk-ee',
+  cake:'kayk','ice cream':'iss kreem',juice:'jooss',water:'waw-ter',
+  chocolate:'chok-oh-lit',pancake:'pan-kayk',soup:'soop',
+};
+function ph(text){
+  const clean=text.replace(/[^\w\s']/g,'').trim().toLowerCase();
+  if(PH[clean]) return PH[clean];
+  return clean.split(/\s+/).map(w=>PH[w]||w).join(' ');
+}
+
+// ════════════ SPEECH ════════════
+let _voice=null;
+function _loadVoice(){
+  const all=window.speechSynthesis.getVoices(); if(!all.length) return;
+  const names=['Samantha','Karen','Zira','Google US English','Microsoft Zira','Moira','Victoria','Fiona','Tessa'];
+  for(const n of names){const v=all.find(v=>v.name.includes(n)); if(v){_voice=v;return;}}
+  const enUS=all.find(v=>v.lang==='en-US'); if(enUS){_voice=enUS;return;}
+  const en=all.find(v=>v.lang.startsWith('en')); if(en) _voice=en;
+}
+window.speechSynthesis.onvoiceschanged=_loadVoice; _loadVoice();
+function speak(text){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel(); if(!_voice) _loadVoice();
+  const u=new SpeechSynthesisUtterance(ph(text));
+  u.lang='en-US'; u.rate=0.80; u.pitch=1.4; u.volume=1;
+  if(_voice) u.voice=_voice;
+  window.speechSynthesis.speak(u);
+}
+
+// ════════════ SCORE ════════════
+let stars=0,streak=0,learned=new Set();
+function addStar(n=1){stars+=n;streak++;
+  document.getElementById('totalStars').textContent=stars;
+  document.getElementById('streak').textContent=streak;}
+function resetStreak(){streak=0;document.getElementById('streak').textContent=0;}
+function learnWord(w){if(!learned.has(w)){learned.add(w);document.getElementById('wordsLearned').textContent=learned.size;}}
+
+// ════════════ STARS ════════════
+function spawnStars(el){
+  const r=el.getBoundingClientRect();
+  const cx=r.left+r.width/2,cy=r.top+r.height/2;
+  ['⭐','🌟','✨','💫','🎉'].forEach((s,i)=>{
+    const sp=document.createElement('span');
+    sp.className='star-pop'; sp.textContent=s;
+    sp.style.left=(cx+(i-2)*28)+'px'; sp.style.top=cy+'px';
+    document.body.appendChild(sp); setTimeout(()=>sp.remove(),1300);
+  });
+}
+
+// ════════════ BUILD GRIDS ════════════
+const BG=['#FF6FB7','#4D96FF','#6BCB77','#FFD93D','#FF922B','#C77DFF','#38D9A9','#FF4D6D'];
+function buildColorGrid(){
+  const g=document.getElementById('colors-grid');
+  COLORS.forEach((c,i)=>{
+    const d=document.createElement('div'); d.className='card';
+    d.style.background=`linear-gradient(135deg,${c.sw}22,${c.sw}55)`;
+    d.innerHTML=`<div class="swatch" style="background:${c.sw}"></div>
+      <div class="card-w">${c.word}</div><div class="card-s">${c.sub}</div>`;
+    d.onclick=()=>{speak(c.word);spawnStars(d);learnWord(c.word);d.classList.add('learned');};
+    g.appendChild(d);
+  });
+}
+function buildGrid(id,data){
+  const g=document.getElementById(id); if(!g) return;
+  data.forEach((item,i)=>{
+    const d=document.createElement('div'); d.className='card';
+    d.style.background=`linear-gradient(135deg,${BG[i%BG.length]}22,${BG[i%BG.length]}44)`;
+    d.innerHTML=`<span class="card-e">${item.e||''}</span>
+      <div class="card-w">${item.word}</div><div class="card-s">${item.sub}</div>`;
+    d.onclick=()=>{speak(item.word);spawnStars(d);learnWord(item.word);d.classList.add('learned');};
+    g.appendChild(d);
+  });
+}
+
+// ════════════ TABS ════════════
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    document.querySelectorAll('.game-panel').forEach(p=>p.classList.remove('open'));
+  });
+});
+
+// ════════════ FLASHCARDS ════════════
+const FC_CATS={
+  Colors:   COLORS.map(c=>({e:'🎨',word:c.word,sub:c.sub,sw:c.sw})),
+  Animals:  [...PETS,...WILD,...OCEAN].map(a=>({e:a.e,word:a.word,sub:a.sub})),
+  Numbers:  NUMBERS.map(n=>({e:n.e,word:n.word,sub:n.sub})),
+  Objects:  [...SCHOOL,...HOME,...TOYS].map(o=>({e:o.e,word:o.word,sub:o.sub})),
+  Body:     BODY.map(b=>({e:b.e,word:b.word,sub:b.sub})),
+  Food:     [...FRUITS,...MEALS].map(f=>({e:f.e,word:f.word,sub:f.sub})),
+};
+const FC_COLORS={Colors:'linear-gradient(135deg,#FF6FB7,#FF922B)',Animals:'linear-gradient(135deg,#6BCB77,#38D9A9)',
+  Numbers:'linear-gradient(135deg,#4D96FF,#C77DFF)',Objects:'linear-gradient(135deg,#FFD93D,#FF922B)',
+  Body:'linear-gradient(135deg,#FF4D6D,#FF6FB7)',Food:'linear-gradient(135deg,#FF922B,#FFD93D)'};
+
+let fcCat='Animals', fcIdx=0, fcFlipped=false;
+function buildFCCats(){
+  const c=document.getElementById('fc-cats');
+  Object.keys(FC_CATS).forEach(cat=>{
+    const btn=document.createElement('button');
+    btn.className='fc-cat-btn'+(cat===fcCat?' active':'');
+    btn.textContent=cat; btn.style.background=FC_COLORS[cat];
+    if(cat==='Objects'||cat==='Food') btn.style.color='#2D2D2D';
+    btn.onclick=()=>{
+      fcCat=cat; fcIdx=0; fcFlipped=false;
+      document.querySelectorAll('.fc-cat-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active'); loadFC();
+    };
+    c.appendChild(btn);
+  });
+}
+function loadFC(){
+  const deck=FC_CATS[fcCat];
+  const item=deck[fcIdx];
+  document.getElementById('fc-cur').textContent=fcIdx+1;
+  document.getElementById('fc-total').textContent=deck.length;
+  const fc=document.getElementById('flashcard');
+  fc.classList.remove('flipped'); fcFlipped=false;
+  // color card for colors category
+  const front=fc.querySelector('.fc-front');
+  if(fcCat==='Colors'&&item.sw){
+    front.style.background=`linear-gradient(135deg,${item.sw}33,${item.sw}66)`;
+    document.getElementById('fc-emoji').textContent='🎨';
+  } else {
+    front.style.background='linear-gradient(135deg,#EEF6FF,#E0EEFF)';
+    document.getElementById('fc-emoji').textContent=item.e||'🎨';
+  }
+  document.getElementById('fc-word').textContent=item.word;
+  document.getElementById('fc-sub').textContent=item.sub;
+  learnWord(item.word);
+}
+function flipCard(){
+  const fc=document.getElementById('flashcard');
+  fc.classList.toggle('flipped'); fcFlipped=!fcFlipped;
+  if(fcFlipped){ speak(FC_CATS[fcCat][fcIdx].word); addStar(); spawnStars(fc); }
+}
+function fcNav(dir){
+  const deck=FC_CATS[fcCat];
+  fcIdx=(fcIdx+dir+deck.length)%deck.length;
+  fcFlipped=false; loadFC();
+}
+function fcSpeak(){ speak(FC_CATS[fcCat][fcIdx].word); }
+
+// ════════════ SPEAKING ACTIVITY ════════════
+const SP_CATS={
+  Animals:[...PETS,...WILD.slice(0,10)].map(a=>({e:a.e,word:a.word,sub:a.sub,type:'animal'})),
+  Colors: COLORS.slice(0,12).map(c=>({e:'🎨',word:c.word,sub:c.sub,sw:c.sw,type:'color'})),
+  Numbers:NUMBERS.slice(0,10).map(n=>({e:n.e,word:n.word,sub:n.sub,type:'number'})),
+  Objects:[...SCHOOL,...HOME].map(o=>({e:o.e,word:o.word,sub:o.sub,type:'object'})),
+  Body:   BODY.slice(0,15).map(b=>({e:b.e,word:b.word,sub:b.sub,type:'body'})),
+  Food:   [...FRUITS,...MEALS].map(f=>({e:f.e,word:f.word,sub:f.sub,type:'food'})),
+};
+const SP_PROMPTS={
+  animal:'Say it out loud: 🐾',color:'What color is this? 🎨',
+  number:'Count and say: 🔢',object:'Name this object: 🧸',
+  body:'Point and say: 👁️',food:'Name this food: 🍎',
+};
+const SP_SENTENCES={
+  animal:'This is a ___',color:'The color is ___',
+  number:'The number is ___',object:'I have a ___',
+  body:'This is my ___',food:'I like ___',
+};
+let spCat='Animals',spIdx=0,spCorrect=0,spTotal=0;
+
+function buildSPCats(){
+  const c=document.getElementById('sp-cats');
+  Object.keys(SP_CATS).forEach(cat=>{
+    const btn=document.createElement('button');
+    btn.className='sp-cat-btn'+(cat===spCat?' active':'');
+    btn.textContent=cat; btn.style.background=FC_COLORS[cat];
+    if(cat==='Objects'||cat==='Food') btn.style.color='#2D2D2D';
+    btn.onclick=()=>{
+      spCat=cat; spIdx=0;
+      document.querySelectorAll('.sp-cat-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active'); loadSP();
+    };
+    c.appendChild(btn);
+  });
+}
+function loadSP(){
+  const deck=SP_CATS[spCat];
+  const item=deck[spIdx%deck.length];
+  document.getElementById('sp-emoji').textContent=item.e||'🎨';
+  document.getElementById('sp-word').textContent=item.word;
+  document.getElementById('sp-sub').textContent=item.sub;
+  const t=item.type||'animal';
+  document.getElementById('sp-prompt').textContent=SP_PROMPTS[t]||'Say it! 🗣️';
+  const sent=(SP_SENTENCES[t]||'Say: ___').replace('___',`<span class="blank">${item.word}</span>`);
+  document.getElementById('sp-sentence').innerHTML=sent;
+  document.getElementById('sp-fb').textContent='';
+  document.getElementById('sp-fb').className='speak-feedback';
+  speak(item.word);
+}
+function spListen(){ speak(SP_CATS[spCat][spIdx%SP_CATS[spCat].length].word); }
+function spCheck(correct){
+  spTotal++;
+  const fb=document.getElementById('sp-fb');
+  if(correct){
+    spCorrect++; fb.textContent='🎉 Great job! You said it!'; fb.className='speak-feedback yes';
+    addStar(); spawnStars(document.querySelector('.speak-card'));
+    speak('Great job! You said it!');
+  } else {
+    fb.textContent='😊 Listen again and try! You can do it!';
+    fb.className='speak-feedback no';
+    speak(SP_CATS[spCat][spIdx%SP_CATS[spCat].length].word);
+  }
+  document.getElementById('sp-correct').textContent=spCorrect;
+  document.getElementById('sp-total').textContent=spTotal;
+}
+function spNext(){
+  spIdx++;
+  const deck=SP_CATS[spCat];
+  if(spIdx>=deck.length) spIdx=0;
+  loadSP();
+}
+
+// ════════════ LISTEN & TOUCH ════════════
+const LQ=[
+  {q:'🐱 Cat',   opts:['🐱','🐶','🐸','🦁'],ans:'🐱'},
+  {q:'🐶 Dog',   opts:['🐱','🐶','🐘','🐻'],ans:'🐶'},
+  {q:'🔴 Red',   opts:['🟡','🟢','🔴','🔵'],ans:'🔴'},
+  {q:'🔵 Blue',  opts:['🟠','🟣','🔵','🟡'],ans:'🔵'},
+  {q:'1️⃣ One',   opts:['2️⃣','1️⃣','3️⃣','4️⃣'],ans:'1️⃣'},
+  {q:'📚 Book',  opts:['📚','🎒','✏️','🍎'],ans:'📚'},
+  {q:'🟢 Green', opts:['🟢','🔴','🔵','🟠'],ans:'🟢'},
+  {q:'🐻 Bear',  opts:['🐸','🦋','🐻','🐧'],ans:'🐻'},
+  {q:'2️⃣ Two',   opts:['1️⃣','3️⃣','2️⃣','5️⃣'],ans:'2️⃣'},
+  {q:'🍎 Apple', opts:['🥛','🍎','⚽','🚗'],ans:'🍎'},
+  {q:'🦁 Lion',  opts:['🐯','🦁','🐘','🦒'],ans:'🦁'},
+  {q:'🐘 Elephant',opts:['🦁','🐘','🦒','🐻'],ans:'🐘'},
+  {q:'🍌 Banana',opts:['🍎','🍌','🍊','🍓'],ans:'🍌'},
+  {q:'👁️ Eye',   opts:['👂','👁️','👃','👄'],ans:'👁️'},
+  {q:'👂 Ear',   opts:['👁️','👃','👂','👄'],ans:'👂'},
+  {q:'🦒 Giraffe',opts:['🦓','🦒','🐘','🦁'],ans:'🦒'},
+  {q:'🍊 Orange fruit',opts:['🍌','🍋','🍊','🍇'],ans:'🍊'},
+  {q:'3️⃣ Three', opts:['2️⃣','3️⃣','4️⃣','5️⃣'],ans:'3️⃣'},
+  {q:'✏️ Pencil',opts:['📚','🖊️','✏️','📏'],ans:'✏️'},
+  {q:'🐰 Rabbit',opts:['🐹','🐰','🐱','🐶'],ans:'🐰'},
+  {q:'🍓 Strawberry',opts:['🍎','🍓','🍇','🍌'],ans:'🍓'},
+  {q:'🏠 House', opts:['🛏️','🏠','🚪','🪑'],ans:'🏠'},
+  {q:'🦋 Butterfly',opts:['🐝','🦋','🐞','🐛'],ans:'🦋'},
+  {q:'5️⃣ Five',  opts:['4️⃣','6️⃣','5️⃣','3️⃣'],ans:'5️⃣'},
+  {q:'🥛 Milk',  opts:['💧','🧃','🥛','🫖'],ans:'🥛'},
+  {q:'👃 Nose',  opts:['👄','👁️','👃','👂'],ans:'👃'},
+  {q:'🐬 Dolphin',opts:['🦈','🐬','🐙','🐧'],ans:'🐬'},
+  {q:'🍕 Pizza', opts:['🍞','🍕','🥪','🍝'],ans:'🍕'},
+  {q:'🐷 Pig',   opts:['🐄','🐷','🐔','🐑'],ans:'🐷'},
+  {q:'🍇 Grapes',opts:['🍓','🍇','🍒','🥝'],ans:'🍇'},
+];
+let lScore=0,lIdx=0;
+function nextListenQ(){
+  const q=LQ[lIdx%LQ.length]; lIdx++;
+  document.getElementById('listen-q').textContent=q.q;
+  document.getElementById('listen-fb').textContent='';
+  document.getElementById('listen-fb').className='feedback-msg';
+  speak(q.q.replace(/[^\w\s]/g,'').trim());
+  const cont=document.getElementById('listen-opts'); cont.innerHTML='';
+  [...q.opts].sort(()=>Math.random()-.5).forEach(opt=>{
+    const btn=document.createElement('div'); btn.className='listen-opt'; btn.textContent=opt;
+    btn.onclick=()=>checkListen(btn,opt,q.ans,cont);
+    cont.appendChild(btn);
+  });
+}
+function checkListen(btn,chosen,ans,cont){
+  cont.querySelectorAll('.listen-opt').forEach(b=>b.style.pointerEvents='none');
+  const fb=document.getElementById('listen-fb');
+  if(chosen===ans){
+    btn.classList.add('correct'); fb.textContent='🎉 Amazing! Great job!'; fb.className='feedback-msg correct';
+    speak('Amazing! Great job!'); lScore++; addStar();
+    document.getElementById('listen-score').textContent=lScore; spawnStars(btn);
+  } else {
+    btn.classList.add('wrong');
+    cont.querySelectorAll('.listen-opt').forEach(b=>{if(b.textContent===ans) b.classList.add('correct');});
+    fb.textContent='😊 Almost! Try the next one!'; fb.className='feedback-msg wrong'; resetStreak();
+  }
+}
+
+// ════════════ DRAG & MATCH ════════════
+const DR=[
+  [{e:'🐱',w:'Cat'},{e:'🔴',w:'Red'},{e:'📚',w:'Book'},{e:'1️⃣',w:'One'},{e:'🟢',w:'Green'}],
+  [{e:'🐘',w:'Elephant'},{e:'🍎',w:'Apple'},{e:'✏️',w:'Pencil'},{e:'2️⃣',w:'Two'},{e:'🔵',w:'Blue'}],
+  [{e:'🦁',w:'Lion'},{e:'🍌',w:'Banana'},{e:'🏠',w:'House'},{e:'3️⃣',w:'Three'},{e:'🟡',w:'Yellow'}],
+  [{e:'🐬',w:'Dolphin'},{e:'🍓',w:'Strawberry'},{e:'🎒',w:'Backpack'},{e:'5️⃣',w:'Five'},{e:'🟣',w:'Purple'}],
+  [{e:'🐷',w:'Pig'},{e:'🥛',w:'Milk'},{e:'🧸',w:'Teddy Bear'},{e:'🔟',w:'Ten'},{e:'🟠',w:'Orange'}],
+  [{e:'🦒',w:'Giraffe'},{e:'🍕',w:'Pizza'},{e:'🛋️',w:'Sofa'},{e:'4️⃣',w:'Four'},{e:'⚫',w:'Black'}],
+];
+let drIdx=0,dragSrc=null;
+function buildDrag(){
+  const round=DR[drIdx%DR.length];
+  document.getElementById('drag-items').innerHTML='';
+  document.getElementById('drop-zones').innerHTML='';
+  document.getElementById('drag-fb').textContent='';
+  const shuffled=[...round].sort(()=>Math.random()-.5);
+  shuffled.forEach(d=>{
+    const div=document.createElement('div'); div.className='drag-item';
+    div.textContent=d.e; div.draggable=true; div.dataset.match=d.w;
+    div.addEventListener('dragstart',e=>{dragSrc=div;div.classList.add('dragging');e.dataTransfer.setData('text',d.w);});
+    div.addEventListener('dragend',()=>div.classList.remove('dragging'));
+    div.addEventListener('touchstart',tS,{passive:true});
+    div.addEventListener('touchmove', tM,{passive:false});
+    div.addEventListener('touchend',  tE);
+    document.getElementById('drag-items').appendChild(div);
+  });
+  round.forEach(d=>{
+    const zone=document.createElement('div'); zone.className='drop-zone';
+    zone.textContent=d.w; zone.dataset.accept=d.w;
+    zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over');});
+    zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
+    zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('over');checkDrop(zone,e.dataTransfer.getData('text'));});
+    document.getElementById('drop-zones').appendChild(zone);
+  });
+}
+function checkDrop(zone,word){
+  if(zone.classList.contains('matched')) return;
+  const round=DR[drIdx%DR.length];
+  if(word===zone.dataset.accept){
+    zone.classList.add('matched');
+    const found=round.find(d=>d.w===word);
+    zone.textContent=(found?.e||'')+' '+word;
+    speak('Correct! '+word);
+    document.querySelectorAll('.drag-item').forEach(di=>{if(di.dataset.match===word) di.remove();});
+    spawnStars(zone); addStar(); learnWord(word);
+    if(document.querySelectorAll('.drop-zone.matched').length===round.length){
+      document.getElementById('drag-fb').textContent='🎊 You matched them all! Amazing!';
+      document.getElementById('drag-fb').className='feedback-msg correct';
+      speak('You matched them all! Amazing!');
+    }
+  } else {
+    zone.classList.add('wrong');
+    document.getElementById('drag-fb').textContent='😊 Try another one!';
+    document.getElementById('drag-fb').className='feedback-msg wrong';
+    setTimeout(()=>zone.classList.remove('wrong'),800); resetStreak();
+  }
+}
+function resetDrag(){drIdx++;buildDrag();}
+let tEl=null,tClone=null;
+function tS(e){tEl=e.currentTarget;}
+function tM(e){
+  e.preventDefault(); const t=e.touches[0];
+  if(!tClone&&tEl){tClone=tEl.cloneNode(true);
+    tClone.style.cssText='position:fixed;z-index:9999;opacity:.8;pointer-events:none;width:68px;height:68px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;border-radius:13px;background:#fff;box-shadow:0 8px 24px #0003;';
+    document.body.appendChild(tClone);}
+  if(tClone){tClone.style.left=(t.clientX-34)+'px';tClone.style.top=(t.clientY-34)+'px';}
+}
+function tE(e){
+  if(tClone){tClone.remove();tClone=null;}
+  if(!tEl) return;
+  const t=e.changedTouches[0];
+  const el=document.elementFromPoint(t.clientX,t.clientY);
+  const zone=el?.closest('.drop-zone');
+  if(zone) checkDrop(zone,tEl.dataset.match);
+  tEl=null;
+}
+
+// ════════════ TRACE & PLAY ════════════
+const LTRS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+let tColor='#FF6FB7',drawing=false,lx=0,ly=0;
+function buildLetterBtns(){
+  const c=document.getElementById('letter-btns'); if(c.children.length) return;
+  LTRS.forEach((l,i)=>{
+    const btn=document.createElement('button'); btn.className='letter-btn'+(i===0?' active':'');
+    btn.textContent=l;
+    btn.onclick=()=>{c.querySelectorAll('.letter-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active'); document.getElementById('letter-guide').textContent=l;
+      speak(l); clearCanvas();};
+    c.appendChild(btn);
+  });
+}
+const canvas=document.getElementById('traceCanvas');
+const ctx=canvas.getContext('2d');
+ctx.lineWidth=9; ctx.lineCap='round'; ctx.lineJoin='round';
+function getPos(e){
+  const r=canvas.getBoundingClientRect(); const sx=canvas.width/r.width,sy=canvas.height/r.height;
+  if(e.touches) return[(e.touches[0].clientX-r.left)*sx,(e.touches[0].clientY-r.top)*sy];
+  return[(e.clientX-r.left)*sx,(e.clientY-r.top)*sy];
+}
+canvas.addEventListener('mousedown', e=>{drawing=true;[lx,ly]=getPos(e);});
+canvas.addEventListener('mousemove', e=>{if(!drawing) return; const[x,y]=getPos(e);ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(x,y);ctx.strokeStyle=tColor;ctx.stroke();[lx,ly]=[x,y];});
+canvas.addEventListener('mouseup',   ()=>drawing=false);
+canvas.addEventListener('mouseleave',()=>drawing=false);
+canvas.addEventListener('touchstart',e=>{e.preventDefault();drawing=true;[lx,ly]=getPos(e);},{passive:false});
+canvas.addEventListener('touchmove', e=>{e.preventDefault();if(!drawing) return; const[x,y]=getPos(e);ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(x,y);ctx.strokeStyle=tColor;ctx.stroke();[lx,ly]=[x,y];},{passive:false});
+canvas.addEventListener('touchend',  ()=>drawing=false);
+function clearCanvas(){ctx.clearRect(0,0,canvas.width,canvas.height);}
+document.querySelectorAll('.tc-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{document.querySelectorAll('.tc-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');tColor=btn.dataset.color;});
+});
+
+// ════════════ GAME HELPERS ════════════
+function openGame(id){
+  document.querySelectorAll('.game-panel').forEach(p=>p.classList.remove('open'));
+  const p=document.getElementById(id); p.classList.add('open');
+  p.scrollIntoView({behavior:'smooth',block:'start'});
+  if(id==='listen-game') nextListenQ();
+  if(id==='drag-game')   buildDrag();
+  if(id==='trace-game')  buildLetterBtns();
+}
+function closeGame(id){document.getElementById(id).classList.remove('open');}
+
+// ════════════ WELCOME ════════════
+function startApp(){
+  const ws=document.getElementById('welcome');
+  ws.classList.add('hide'); setTimeout(()=>ws.style.display='none',700);
+}
+
+// ════════════ INIT ════════════
+buildColorGrid();
+buildGrid('g-pets',   PETS);
+buildGrid('g-wild',   WILD);
+buildGrid('g-ocean',  OCEAN);
+buildGrid('g-numbers',NUMBERS);
+buildGrid('g-school', SCHOOL);
+buildGrid('g-home',   HOME);
+buildGrid('g-toys',   TOYS);
+buildGrid('g-body',   BODY);
+buildGrid('g-fruits', FRUITS);
+buildGrid('g-meals',  MEALS);
+buildFCCats(); loadFC();
+buildSPCats(); loadSP();
+</script>
+</body>
+</html>
